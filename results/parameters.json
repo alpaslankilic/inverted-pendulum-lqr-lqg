@@ -1,0 +1,26 @@
+{
+  "cartMass": 0.65,
+  "pendulumMass": 0.18,
+  "halfLength": 0.28,
+  "inertia": 0.0047040000000000007,
+  "cartFriction": 0.08,
+  "gravity": 9.81,
+  "forceLimit": 8,
+  "sampleTime": 0.002,
+  "initialState": [
+    0,
+    0,
+    0.08,
+    0
+  ],
+  "reference": 0.15,
+  "referenceTime": 0.35,
+  "disturbanceTime": 2.5,
+  "disturbanceDuration": 0.12,
+  "disturbanceForce": 0.7,
+  "positionNoiseStd": 0.0003,
+  "angleNoiseStd": 0.0007,
+  "forceNoiseStd": 0.02,
+  "seed": 73,
+  "stopTime": 4.678
+}

@@ -1,0 +1,30 @@
+{
+  "controllers": [
+    {
+      "controller": "LQR",
+      "peak_angle_deg": 4.5836623610465859,
+      "peak_actuator_force_N": 5.0079940292550846,
+      "final_position_error_mm": 0.4584096307667096,
+      "post_pulse_settling_s": 1.2359999999999998,
+      "rk4_max_state_error": 1.152073228483097E-15,
+      "velocity_estimation_rms_m_s": 0.005575394254666243,
+      "angular_velocity_estimation_rms_rad_s": 0.016782663501693117
+    },
+    {
+      "controller": "LQG",
+      "peak_angle_deg": 4.5836623610465859,
+      "peak_actuator_force_N": 8,
+      "final_position_error_mm": 1.3593561904305662,
+      "post_pulse_settling_s": 1.7139999999999995,
+      "rk4_max_state_error": 4.5519144009631418E-15,
+      "velocity_estimation_rms_m_s": 0.0055753138418397387,
+      "angular_velocity_estimation_rms_rad_s": 0.01678238066707358
+    }
+  ],
+  "stop_time_s": 4.678,
+  "sample_time_s": 0.002,
+  "position_settling_tolerance_m": 0.003,
+  "angle_settling_tolerance_rad": 0.0016,
+  "noise_seed": 73,
+  "verification": "PASS"
+}
