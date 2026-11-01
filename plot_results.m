@@ -14,11 +14,14 @@ title(ax,'(a) Position tracking on the nonlinear plant','FontWeight','normal');
 legend(ax,'Location','southoutside','Orientation','horizontal','Box','off');
 style(ax,t);
 ax = nexttile(layout);
+yline(ax,0,':','Color',[.6 .6 .6],'LineWidth',1.3, ...
+    'DisplayName','Upright target (0 deg)');
 draw_comparison(ax,t,result,3,180/pi,colors);
 events(ax,p);
 ylabel(ax,'Pendulum angle from upright [deg]');
 xlabel(ax,'Time [s]');
 title(ax,'(b) Balance through the disturbance','FontWeight','normal');
+legend(ax,'Location','southoutside','Orientation','horizontal','Box','off');
 style(ax,t);
 save_figure(fig,'01_lqr_lqg_response',visible);
 
@@ -87,9 +90,12 @@ for k = 1:2
         title(ax,'(a) Position recovery after the pulse','FontWeight','normal');
         legend(ax,'Location','southoutside','Orientation','horizontal','Box','off');
     else
+        yline(ax,0,':','Color',[.6 .6 .6],'LineWidth',1.3, ...
+            'DisplayName','Upright target (0 deg)');
         ylabel(ax,'Angle from upright [deg]');
         xlabel(ax,'Time [s]');
         title(ax,'(b) Upright balance recovery','FontWeight','normal');
+        legend(ax,'Location','southoutside','Orientation','horizontal','Box','off');
     end
 end
 save_figure(fig,'04_disturbance_detail',visible);
@@ -107,7 +113,7 @@ function events(ax,p)
 if ax.XLim(1)<p.referenceTime
     xline(ax,p.referenceTime,':','Color',[.55 .55 .55],'HandleVisibility','off');
 end
-xline(ax,p.disturbanceTime,'--','Force pulse','Color',[.45 .2 .55], ...
+xline(ax,p.disturbanceTime,'--',sprintf('Force pulse: %.3f s',p.disturbanceTime),'Color',[.45 .2 .55], ...
     'LabelOrientation','horizontal','FontSize',10,'HandleVisibility','off');
 xline(ax,p.disturbanceTime+p.disturbanceDuration,':', ...
     'Color',[.45 .2 .55],'HandleVisibility','off');

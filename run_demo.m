@@ -7,15 +7,8 @@ cleanup = onCleanup(@() cd(previous));
 cd(root);
 p = project_parameters();
 design = design_controller(p);
-probe = (0:p.sampleTime:8).';
-probeInputs = experiment_inputs(probe,p);
-settling = zeros(1,2);
-for mode = 0:1
-    result = simulate_reference(probe,probeInputs,p,design,mode);
-    settling(mode+1) = settling_duration(probe,result.state,p);
-end
+[p,timing] = plan_experiment(p,design);
 pulseEnd = p.disturbanceTime+p.disturbanceDuration;
-p.stopTime = ceil((pulseEnd+1.2*max(settling))/p.sampleTime)*p.sampleTime;
 t = (0:p.sampleTime:p.stopTime).';
 inputs = experiment_inputs(t,p);
 names = {'LQR','LQG'};
@@ -46,7 +39,7 @@ for mode = 0:1
     assert(error<1e-8,'Simulink and sample-by-sample RK4 disagree.');
     assert(max(abs(result{mode+1}.force))<=p.forceLimit+1e-8,'Force bound failed.');
     assert(max(abs(result{mode+1}.state(:,3)))<pi/2,'Pendulum fell.');
-    settled = settling_duration(t,result{mode+1}.state,p);
+    settled = settling_duration(t,result{mode+1}.state,p,timing.state_tolerance(mode+1,:));
     assert(p.stopTime>pulseEnd+settled,'Figure would truncate disturbance recovery.');
     after = t>=p.referenceTime;
     difference = result{mode+1}.estimate-result{mode+1}.state;
@@ -56,13 +49,15 @@ for mode = 0:1
     metrics(mode+1).final_position_error_mm = ...
         1e3*abs(result{mode+1}.state(end,1)-p.reference);
     metrics(mode+1).post_pulse_settling_s = settled;
+    metrics(mode+1).initial_settled_at_s = timing.initial_settled_at_s(mode+1);
+    metrics(mode+1).final_settled_at_s = pulseEnd+settled;
     metrics(mode+1).rk4_max_state_error = error;
     metrics(mode+1).velocity_estimation_rms_m_s = rms(difference(after,2));
     metrics(mode+1).angular_velocity_estimation_rms_rad_s = rms(difference(after,4));
-    data = array2table([t,inputs.reference,inputs.disturbance, ...
+    data = array2table([t,inputs.reference,zeros(size(t)),inputs.disturbance, ...
         inputs.processForce,inputs.measurementNoise,result{mode+1}.state, ...
         result{mode+1}.estimate,result{mode+1}.force], 'VariableNames', ...
-        {'time_s','reference_m','disturbance_N','force_noise_N', ...
+        {'time_s','reference_m','angle_reference_rad','disturbance_N','force_noise_N', ...
         'position_noise_m','angle_noise_rad','cart_m','cart_velocity_m_s', ...
         'angle_rad','angular_velocity_rad_s','estimated_cart_m', ...
         'estimated_cart_velocity_m_s','estimated_angle_rad', ...
@@ -75,10 +70,13 @@ report.sample_time_s = p.sampleTime;
 report.position_settling_tolerance_m = 0.02*p.reference;
 report.angle_settling_tolerance_rad = 0.02*abs(p.initialState(3));
 report.noise_seed = p.seed;
+report.force_pulse_start_s = p.disturbanceTime;
+report.angle_reference_rad = 0;
 report.verification = 'PASS';
 write_json('results/metrics.json',report);
 write_json('results/parameters.json',p);
 write_json('results/controller_design.json',design);
+write_json('results/timing.json',timing);
 plot_results(t,inputs,result,p,showFigures);
 disp(report);
 disp(struct2table(metrics));
@@ -90,10 +88,9 @@ signal.time = [];
 signal.signals = struct('values',values,'dimensions',size(values,2));
 end
 
-function duration = settling_duration(t,states,p)
+function duration = settling_duration(t,states,p,tolerance)
 after = find(t>=p.disturbanceTime+p.disturbanceDuration);
-outside = abs(states(:,1)-p.reference)>0.02*abs(p.reference) ...
-    | abs(states(:,3))>0.02*abs(p.initialState(3));
+outside = any(abs(states-[p.reference,0,0,0])>tolerance,2);
 last = find(outside(after),1,'last');
 if isempty(last)
     duration = 0;

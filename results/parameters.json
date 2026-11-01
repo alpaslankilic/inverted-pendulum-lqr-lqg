@@ -15,12 +15,12 @@
   ],
   "reference": 0.15,
   "referenceTime": 0.35,
-  "disturbanceTime": 2.5,
+  "disturbanceTime": 3.026,
   "disturbanceDuration": 0.12,
   "disturbanceForce": 0.7,
   "positionNoiseStd": 0.0003,
   "angleNoiseStd": 0.0007,
   "forceNoiseStd": 0.02,
   "seed": 73,
-  "stopTime": 4.678
+  "stopTime": 5.118
 }

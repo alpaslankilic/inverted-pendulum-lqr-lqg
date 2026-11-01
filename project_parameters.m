@@ -11,12 +11,12 @@ p.sampleTime = 0.002;
 p.initialState = [0; 0; 0.08; 0];
 p.reference = 0.15;
 p.referenceTime = 0.35;
-p.disturbanceTime = 2.5;
+p.disturbanceTime = 3.026;
 p.disturbanceDuration = 0.12;
 p.disturbanceForce = 0.7;
 p.positionNoiseStd = 0.0003;
 p.angleNoiseStd = 0.0007;
 p.forceNoiseStd = 0.02;
 p.seed = 73;
-p.stopTime = 4.678;
+p.stopTime = 5.118;
 end

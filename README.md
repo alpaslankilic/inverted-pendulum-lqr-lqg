@@ -16,8 +16,10 @@ short functions. State order: cart position, velocity, upright angle, angular ve
 ![LQR and LQG nonlinear responses](results/01_lqr_lqg_response.png)
 
 **Figure 1. Tracking and balance.** From a 4.58-degree initial lean, the cart
-receives a 0.15 m request at 0.35 s and a marked 0.7 N disturbance from 2.50 to
-2.62 s. Both controllers recover. Full-state LQR has ideal access to every state;
+receives a 0.15 m request at 0.35 s. LQR first settles at 2.716 s and LQG at
+3.024 s. The marked 0.7 N force pulse starts one sample later, at 3.026 s,
+and ends at 3.146 s. Both controllers then settle again. The pendulum target
+is explicitly shown as **0 degrees (upright)**. Full-state LQR has ideal access to every state;
 LQG receives only noisy position and angle and estimates both velocities.
 They are different sensing configurations, not a claim that LQG outperforms ideal LQR.
 
@@ -39,12 +41,19 @@ is used.
 
 **Figure 4. Recovery after the force pulse.** This close-up uses the same data
 as Figure 1. Both controllers return inside the position and angle tolerances;
-post-pulse settling is 1.236 s for LQR and 1.714 s for LQG in this realization.
+post-pulse settling is 1.354 s for LQR and 1.792 s for LQG in this realization.
+The upright angle reference is shown here as well.
 Every figure marks pulse onset and completion.
 
-The common 4.678 s endpoint includes 20% headroom after the slower recovery.
-Settling tolerances are 3 mm (2% of the position request) and 0.0016 rad
-(2% of the initial lean). Residual fluctuations remain because noise continues.
+The common endpoint is **5.118 s**. It follows the last settling point,
+**4.938 s** for LQG, by 10% of that post-pulse recovery duration. An unforced
+sizing run determines the first settled times before the pulse is scheduled.
+
+The same four-state criteria are used before and after the pulse: position
+within 3 mm (2% of the request), angle within 0.0016 rad (2% of the initial lean),
+and both physical velocities within 2% of their controller-specific startup
+peaks. Persistent measurement noise does not imply an exactly constant trace.
+`results/timing.json` records both phases, targets and tolerances.
 PNG previews, vector PDFs, full CSV data, gains, covariances and metrics are in `results/`.
 
 ## Design and verification

@@ -1,0 +1,40 @@
+{
+  "initial_settled_at_s": [
+    2.716,
+    3.024
+  ],
+  "force_pulse_start_s": 3.026,
+  "force_pulse_end_s": 3.146,
+  "final_settled_at_s": [
+    4.5,
+    4.938
+  ],
+  "post_pulse_settling_s": [
+    1.354,
+    1.7919999999999998
+  ],
+  "state_tolerance": [
+    [
+      0.003,
+      0.0050971594018588921,
+      0.0016,
+      0.010443238024731395
+    ],
+    [
+      0.003,
+      0.012645158962076849,
+      0.0016,
+      0.031656939041557156
+    ]
+  ],
+  "state_order": [
+    "position_m",
+    "velocity_m_s",
+    "angle_rad",
+    "angular_velocity_rad_s"
+  ],
+  "stop_time_s": 5.118,
+  "tail_fraction": 0.1,
+  "angle_reference_rad": 0,
+  "criteria": "2% of position request, initial lean, and each controller's startup velocity peaks; true physical states"
+}
