@@ -3,6 +3,12 @@
 A nonlinear cart-pendulum with sampled LQR, a steady-state Kalman estimator,
 actuator saturation, measurement noise, and an external force pulse.
 
+Both controllers use the same four-state LQR gain. **LQR: true states** feeds
+back the plant's position, velocity, angle and angular velocity directly.
+**LQG: estimated states** feeds back a Kalman estimate of all four states;
+only position and angle are measured. The legend distinguishes direct state
+access from estimated state feedback, not the number of feedback states.
+
 ## Run
 
 Requires **MATLAB, Simulink and Control System Toolbox**; verified on **R2025b**.
@@ -69,7 +75,4 @@ controller/estimator stability, force bounds, upright recovery and sample-by-sam
 agreement between Simulink and a separate RK4 implementation. This is local
 stabilization near upright, not swing-up or a global stability guarantee.
 
-Topic: **P05** in Muhammad Mudassir Shakeel's
-[*MATLAB, Simulink & Simscape Project-Based Masterbook*](https://buymeacoffee.com/engrprogrammer),
-extended with LQG. This is a fresh implementation and repository, not a fork of
-the previous Control Bootcamp project. [MIT License](LICENSE).
+Code, model and figures are available under the [MIT License](LICENSE).

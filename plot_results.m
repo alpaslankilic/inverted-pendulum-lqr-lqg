@@ -36,9 +36,9 @@ style(ax,t);
 ax = nexttile(layout);
 hold(ax,'on');
 plot(ax,t,result{1}.force,'--','Color',colors(1,:),'LineWidth',1.5, ...
-    'DisplayName','Full-state LQR');
+    'DisplayName','LQR: true states');
 plot(ax,t,result{2}.force,'Color',colors(2,:),'LineWidth',1.5, ...
-    'DisplayName','LQG: position + angle');
+    'DisplayName','LQG: estimated states');
 events(ax,p);
 ylabel(ax,'Actuator force [N]');
 xlabel(ax,'Time [s]');
@@ -80,9 +80,9 @@ for k = 1:2
     scale = 1000;
     if k==2, column=3;scale=180/pi;end
     plot(ax,t(selected),scale*result{1}.state(selected,column),'--', ...
-        'Color',colors(1,:),'LineWidth',1.5,'DisplayName','Full-state LQR');
+        'Color',colors(1,:),'LineWidth',1.5,'DisplayName','LQR: true states');
     plot(ax,t(selected),scale*result{2}.state(selected,column), ...
-        'Color',colors(2,:),'LineWidth',1.8,'DisplayName','LQG: position + angle');
+        'Color',colors(2,:),'LineWidth',1.8,'DisplayName','LQG: estimated states');
     events(ax,p);
     style(ax,t(selected));
     if k==1
@@ -104,9 +104,9 @@ end
 function draw_comparison(ax,t,result,column,scale,colors)
 hold(ax,'on');
 plot(ax,t,scale*result{1}.state(:,column),'--','Color',colors(1,:), ...
-    'LineWidth',1.5,'DisplayName','Full-state LQR');
+    'LineWidth',1.5,'DisplayName','LQR: true states');
 plot(ax,t,scale*result{2}.state(:,column),'Color',colors(2,:), ...
-    'LineWidth',1.8,'DisplayName','LQG: position + angle');
+    'LineWidth',1.8,'DisplayName','LQG: estimated states');
 end
 
 function events(ax,p)
